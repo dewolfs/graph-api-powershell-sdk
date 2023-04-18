@@ -1,0 +1,6 @@
+# File: aad-variables.yml
+variables:
+  clientIdGroups: 'replace-me'
+  clientIdApplications: 'replace-me'
+  tenantid: 'replace-me'
+  keyVaultName: 'kv-graph-001'

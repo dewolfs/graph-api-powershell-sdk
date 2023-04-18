@@ -1,0 +1,21 @@
+parameters:
+- name: 'clientIdGroups'
+- name: 'tenantId'
+
+steps:
+- task: AzureKeyVault@2
+  displayName: 'Get secrets from keyvault'
+  inputs:
+    azureSubscription: $(azureSubscriptionGroups)
+    KeyVaultName: $(keyVaultName)
+    SecretsFilter: 'secret-spn-prd-graph-groups'
+    RunAsPreJob: true
+
+- task: PowerShell@2
+  displayName: 'Set group owners'
+  inputs:
+    filePath: 'scripts/addOwnertoAADGroup.ps1'
+  env:
+    clientSecret: $(secret-spn-prd-graph-groups) 
+    clientId: $(clientIdGroups)
+    tenantId: $(tenantId)

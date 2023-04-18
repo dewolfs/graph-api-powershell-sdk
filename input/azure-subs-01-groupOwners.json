@@ -1,0 +1,28 @@
+{
+ "items":[
+  	{
+        "groupName": "secgrp-sub-cntr-nonprd-dataplatform-01",
+        "groupOwner": "Jason.Bourne@replace-me.com"
+	},
+	{
+        "groupName": "secgrp-sub-cntr-prd-dataplatform-01",
+        "groupOwner": "John.McClane@replace-me.com"
+	},
+	{
+        "groupName": "secgrp-sub-read-nonprd-dataplatform-01",
+        "groupOwner": "John.Rambo@replace-me.com"
+	},
+	{
+        "groupName": "secgrp-sub-read-prd-dataplatform-01",
+        "groupOwner": "Sarah.Connor@replace-me.com"
+	},
+	{
+        "groupName": "secgrp-sub-read-nonprd-dataplatform-01",
+        "groupOwner": "Duke.Nukem@replace-me.com"
+	},
+	{
+        "groupName": "secgrp-sub-read-prd-dataplatform-01",
+        "groupOwner": "Ethan.Hunt@replace-me.com"
+	}
+	]
+}

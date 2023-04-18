@@ -1,0 +1,72 @@
+trigger:
+- none
+
+variables: 
+- template: '/input/aad-variables.yml'
+- name: azureSubscriptionApp
+  value: 'conn-azure-spn-applications'
+- name: azureSubscriptionGroups
+  value: 'conn-azure-spn-groups'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: AppRegistrations
+  displayName: 'Create App Registrations'
+  jobs:
+    - job: 'AppRegistrationsNP'
+      displayName: 'Create App Registrations non-prd'
+      steps:
+      - template: '/pipeline/01-applications.yml'
+        parameters:
+          environment: "nonprd"
+          uniqueName: "dataplatform-01"
+          clientIdApplications: $(clientIdApplications)
+          tenantId: $(tenantId)
+
+    - job: 'AppRegistrationsP'
+      displayName: 'Create App Registrations prd'
+      dependsOn: 'AppRegistrationsNP'
+      steps:
+      - template: '/pipeline/01-applications.yml'
+        parameters:
+          environment: "prd"
+          uniqueName: "dataplatform-01"
+          clientIdApplications: $(clientIdApplications)
+          tenantId: $(tenantId)
+
+- stage: Groups
+  displayName: 'Create Groups'
+  jobs:
+    - job: 'GroupsNP'
+      displayName: 'Create Groups non-prd'
+      steps:
+      - template: '/pipeline/02-groups.yml'
+        parameters:
+          environment: "nonprd"
+          uniqueName: "dataplatform-01"
+          clientIdGroups: $(clientIdGroups)
+          tenantId: $(tenantId)
+          
+    - job: 'GroupsP'
+      displayName: 'Create Groups prd'
+      dependsOn: 'GroupsNP'
+      steps:
+      - template: '/pipeline/02-groups.yml'
+        parameters:
+          environment: "prd"
+          uniqueName: "dataplatform-01"
+          clientIdGroups: $(clientIdGroups)
+          tenantId: $(tenantId)
+
+- stage: GroupOwners
+  displayName: 'Set GroupOwners'
+  jobs:
+    - job: 'GroupOwners'
+      displayName: 'Set GroupOwners'
+      steps:
+      - template: '/pipeline/03-groupowners.yml'
+        parameters:
+          clientIdGroups: $(clientIdGroups)
+          tenantId: $(tenantId)

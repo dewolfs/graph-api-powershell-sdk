@@ -1,0 +1,26 @@
+parameters:
+- name: 'uniqueName' 
+- name: 'environment'
+- name: 'clientIdApplications'
+- name: 'tenantId'
+
+steps:
+- task: AzureKeyVault@2
+  displayName: 'Get secrets from keyvault'
+  inputs:
+    azureSubscription: $(azureSubscriptionApp)
+    KeyVaultName: $(keyVaultName)
+    SecretsFilter: 'secret-spn-prd-graph-applications'
+    RunAsPreJob: true
+
+- task: PowerShell@2
+  displayName: 'Create Azure AD app registration'
+  inputs:
+    filePath: 'scripts/createSPN.ps1'
+    arguments: >
+      -environment ${{ parameters.environment }}
+      -uniqueName ${{ parameters.uniqueName }}
+  env:
+    clientSecret: $(secret-spn-prd-graph-applications) 
+    clientId: $(clientIdApplications)
+    tenantId: $(tenantId)
